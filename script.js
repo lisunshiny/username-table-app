@@ -15,9 +15,13 @@ function getUsers(commaSeparatedUsers) {
   var promises = []
 
   _.each(usernames, function(username) {
-    var request = $.get("https://api.github.com/users/" + username, function(response) {
-      users.push([username, response.public_repos])
-    })
+    var request = $.ajax("https://api.github.com/users/" + username)
+                   .done(function(response) {
+                     users.push([username, response.public_repos])
+                   })
+                   .fail(function(response) {
+                     console.log("sad");
+                   })
 
     promises.push(request.promise())
   })
